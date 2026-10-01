@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookmarks</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+      color: #1f2937;
+      background: #f3f4f6;
+      padding: 3rem 1.5rem;
+    }
+
+    .app {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #111827;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Form */
+    .bookmark-form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.35rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      font: inherit;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .error {
+      color: #dc2626;
+      font-size: 0.875rem;
+      min-height: 1.25rem;
+    }
+
+    .add-button {
+      justify-self: start;
+      padding: 0.65rem 1.25rem;
+      font: inherit;
+      font-weight: 600;
+      color: #ffffff;
+      background: #4f46e5;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .add-button:hover {
+      background: #4338ca;
+    }
+
+    /* List */
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.75rem;
+    }
+
+    .list-header h2 {
+      font-size: 1.1rem;
+      color: #111827;
+    }
+
+    .count {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .bookmark-list {
+      list-style: none;
+    }
+
+    .bookmark {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .bookmark:last-child {
+      border-bottom: none;
+    }
+
+    .bookmark-info {
+      flex: 1;
+      min-width: 0; /* lets long text shrink and truncate */
+    }
+
+    .bookmark-title {
+      display: block;
+      font-weight: 600;
+      color: #4f46e5;
+      text-decoration: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .bookmark-title:hover {
+      text-decoration: underline;
+    }
+
+    .bookmark-url {
+      display: block;
+      font-size: 0.85rem;
+      color: #6b7280;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .delete-button {
+      flex-shrink: 0;
+      padding: 0.4rem 0.8rem;
+      font: inherit;
+      font-size: 0.85rem;
+      color: #dc2626;
+      background: transparent;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .delete-button:hover {
+      background: #fef2f2;
+    }
+
+    .empty {
+      text-align: center;
+      color: #9ca3af;
+      padding: 1.5rem 0;
+    }
+
+    /* Search bar */
+    .search-container {
+      margin-bottom: 1rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.75rem 0.85rem;
+      font: inherit;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .search-input::placeholder {
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Bookmarks</h1>
+
+    <section class="card">
+      <form class="bookmark-form" id="bookmark-form" novalidate>
+        <div>
+          <label for="title">Title</label>
+          <input type="text" id="title" placeholder="My favorite site" required>
+        </div>
+        <div>
+          <label for="url">URL</label>
+          <input type="text" id="url" placeholder="example.com" required>
+        </div>
+        <p class="error" id="error" role="alert"></p>
+        <button type="submit" class="add-button">Add bookmark</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="list-header">
+        <h2>Saved</h2>
+        <span class="count" id="count"></span>
+      </div>
+      <div class="search-container">
+        <input type="text" class="search-input" id="search-input" placeholder="Search bookmarks...">
+      </div>
+      <ul class="bookmark-list" id="bookmark-list"></ul>
+    </section>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'bookmarks';
+
+    const form = document.getElementById('bookmark-form');
+    const titleInput = document.getElementById('title');
+    const urlInput = document.getElementById('url');
+    const errorText = document.getElementById('error');
+    const list = document.getElementById('bookmark-list');
+    const count = document.getElementById('count');
+    const searchInput = document.getElementById('search-input');
+
+    let bookmarks = loadBookmarks();
+    let searchQuery = '';
+
+    function loadBookmarks() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return Array.isArray(saved) ? saved : [];
+      } catch {
+        return []; // saved data was broken, start fresh
+      }
+    }
+
+    function saveBookmarks() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(bookmarks));
+    }
+
+    // Turns "example.com" into "https://example.com".
+    // Returns null for anything that isn't a valid http(s) link.
+    function normalizeUrl(text) {
+      const withScheme = /^[a-z][a-z0-9+.-]*:/i.test(text) ? text : 'https://' + text;
+      try {
+        const url = new URL(withScheme);
+        if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
+        if (!url.hostname.includes('.') && url.hostname !== 'localhost') return null;
+        return url.href;
+      } catch {
+        return null;
+      }
+    }
+
+    function render() {
+      list.innerHTML = '';
+
+      // Filter bookmarks based on search query
+      const filtered = bookmarks.filter(bookmark =>
+        bookmark.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      // Update count
+      const totalCount = bookmarks.length;
+      const filteredCount = filtered.length;
+      if (searchQuery) {
+        count.textContent = filteredCount === 1 ? '1 match' : `${filteredCount} matches`;
+      } else {
+        count.textContent = totalCount === 1 ? '1 bookmark' : `${totalCount} bookmarks`;
+      }
+
+      if (filtered.length === 0) {
+        const empty = document.createElement('li');
+        empty.className = 'empty';
+        empty.textContent = searchQuery
+          ? 'No bookmarks match your search.'
+          : 'No bookmarks yet. Add one above!';
+        list.appendChild(empty);
+        return;
+      }
+
+      // Build elements with textContent (not innerHTML) so titles can't inject HTML
+      for (const bookmark of filtered) {
+        const item = document.createElement('li');
+        item.className = 'bookmark';
+
+        const info = document.createElement('div');
+        info.className = 'bookmark-info';
+
+        const link = document.createElement('a');
+        link.className = 'bookmark-title';
+        link.href = bookmark.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = bookmark.title;
+
+        const url = document.createElement('span');
+        url.className = 'bookmark-url';
+        url.textContent = bookmark.url;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'delete-button';
+        deleteButton.type = 'button';
+        deleteButton.textContent = 'Delete';
+        deleteButton.setAttribute('aria-label', `Delete ${bookmark.title}`);
+        deleteButton.addEventListener('click', () => deleteBookmark(bookmark.id));
+
+        info.append(link, url);
+        item.append(info, deleteButton);
+        list.appendChild(item);
+      }
+    }
+
+    function deleteBookmark(id) {
+      bookmarks = bookmarks.filter(bookmark => bookmark.id !== id);
+      saveBookmarks();
+      render();
+    }
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+
+      const title = titleInput.value.trim();
+      const url = normalizeUrl(urlInput.value.trim());
+
+      if (!title) {
+        errorText.textContent = 'Please enter a title.';
+        titleInput.focus();
+        return;
+      }
+      if (!url) {
+        errorText.textContent = 'Please enter a valid URL, like example.com.';
+        urlInput.focus();
+        return;
+      }
+
+      bookmarks.unshift({
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+        title,
+        url
+      });
+      saveBookmarks();
+      render();
+
+      errorText.textContent = '';
+      form.reset();
+      titleInput.focus();
+    });
+
+    searchInput.addEventListener('input', event => {
+      searchQuery = event.target.value;
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,14 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Hello World</title>
-  <style>
-    body { font-family: sans-serif; max-width: 600px; margin: 50px auto; }
-    h1 { color: #333; }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | My Server</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/dark.css">
+  <script src="/theme.js"></script>
 </head>
 <body>
-  <h1>About</h1>
-  <p>This page is the about page!</p>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/" class="logo">My Server</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about.html" class="active">About</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+        <li><button class="theme-toggle" type="button" aria-label="Toggle dark mode">🌙</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>About</h1>
+    <p>This page is the about page!</p>
+  </main>
 </body>
 </html>

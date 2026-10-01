@@ -1,0 +1,60 @@
+/* Dark mode: applies when <html> has data-theme="dark" (set by theme.js) */
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+[data-theme="dark"] body {
+  color: #e5e7eb;
+  background: #0f172a;
+}
+
+/* Nav bar */
+[data-theme="dark"] .navbar {
+  background: #111827;
+  border-bottom-color: #1f2937;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .logo {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .nav-links a {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .nav-links a:hover {
+  background: #1f2937;
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .nav-links a.active {
+  background: #312e81;
+  color: #c7d2fe;
+}
+
+[data-theme="dark"] .theme-toggle {
+  border-color: #374151;
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background: #1f2937;
+}
+
+/* Page content */
+[data-theme="dark"] h1 {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] p {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] a {
+  color: #818cf8;
+}
+
+/* Footer */
+[data-theme="dark"] .footer {
+  border-top-color: #1f2937;
+}
